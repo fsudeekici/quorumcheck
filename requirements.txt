@@ -10,3 +10,6 @@ redis
 python-dotenv
 pytest
 httpx
+anthropic
+scikit-learn
+numpy

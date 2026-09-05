@@ -1,7 +1,3 @@
-import os
-
-os.environ.setdefault("DATABASE_URL", "sqlite:///./test_generate.db")
-
 from app.db.base import SessionLocal, engine, Base  # noqa: E402
 from app.models.order import Order  # noqa: E402
 from app.models.return_record import ReturnRecord  # noqa: E402
@@ -14,8 +10,6 @@ def setup_module():
 
 def teardown_module():
     Base.metadata.drop_all(bind=engine)
-    if os.path.exists("test_generate.db"):
-        os.remove("test_generate.db")
 
 
 def test_generate_produces_expected_record_count():

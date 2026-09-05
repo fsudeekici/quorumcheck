@@ -29,6 +29,10 @@ class Settings(BaseSettings):
 
     CAP_MODE: CapMode = CapMode.AP    # varsayılan tradeoff kararı
 
+    ANTHROPIC_API_KEY: str = ""
+    LLM_MODEL: str = "claude-sonnet-4-5"
+    RAG_TOP_K: int = 3
+
     model_config = SettingsConfigDict(env_file=".env")
 
 
