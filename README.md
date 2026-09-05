@@ -76,3 +76,18 @@ PYTHONPATH=. python scripts/generate_synthetic_data.py --tenants 2 --orders 50 -
 `--violation-rate`, "iade tutarı sipariş tutarını aşamaz" kuralının ne
 sıklıkla kasıtlı ihlal edileceğini belirler — Hafta 3+'ta validator
 worker'ların bu ihlalleri yakalayıp yakalamadığını ölçmek için kullanılacak.
+
+## Tek validator + RAG baseline (Hafta 3)
+
+```bash
+PYTHONPATH=. python scripts/embed_rules.py     # kuralları embed'ler
+# ANTHROPIC_API_KEY'i .env dosyasına ekle, sonra:
+curl -X POST http://localhost:8000/returns/1/validate
+```
+
+Embedding katmanı `HashingVectorizer` (scikit-learn) kullanıyor —
+kelime örtüşmesi bazlı, semantik anlama sahip değil, ama API key
+gerektirmiyor ve stateless (yeni metinler için yeniden fit gerekmiyor).
+Gerçek bir semantic embedding modeline (örn. Voyage AI) geçmek için
+sadece `app/core/embeddings.py` değişir, RAG/validator katmanları
+etkilenmez — bu ayrım kasıtlı bir mimari karar.
