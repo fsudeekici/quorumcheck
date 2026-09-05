@@ -1,5 +1,4 @@
-from sqlalchemy import Column, Integer, Text, DateTime, ForeignKey, Index, func
-from sqlalchemy.dialects.postgresql import ARRAY, FLOAT
+from sqlalchemy import Column, Integer, Text, DateTime, ForeignKey, Index, JSON, func
 
 from app.db.base import Base
 
@@ -7,9 +6,11 @@ from app.db.base import Base
 class ValidationRule(Base):
     """
     RAG'in kaynak dokumanlari. rule_text embedding'e cevrilip vector
-    aramada kullanilacak. Hafta 3'te pgvector extension'a gecilebilir
-    (ARRAY(FLOAT) yerine Vector tipi + cosine similarity index) -
-    simdilik basit tutuluyor.
+    aramada kullanilacak. embedding su an JSON (float listesi) olarak
+    tutuluyor - Postgres + SQLite ikisinde de calisir, boylece yerel
+    testler icin ayri bir DB kurmaya gerek kalmiyor. Hafta 3'te
+    pgvector extension + Vector tipine + cosine similarity index'e
+    gecilecek (o zaman Postgres-only olacak, kasitli bir tradeoff).
     """
     __tablename__ = "validation_rules"
 
@@ -17,7 +18,7 @@ class ValidationRule(Base):
     tenant_id = Column(Integer, ForeignKey("tenants.id"), nullable=False)
 
     rule_text = Column(Text, nullable=False)
-    embedding = Column(ARRAY(FLOAT), nullable=True)
+    embedding = Column(JSON, nullable=True)
 
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
