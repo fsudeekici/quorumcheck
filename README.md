@@ -27,22 +27,23 @@ AP modu elindeki oyla best-effort karar verir.
 
 FastAPI, PostgreSQL, Redis, Celery, RAG (embedding + vector search), LLM API, Docker Compose.
 
-## Haftalık ilerleme (branch stratejisi)
+## Geliştirme aşamaları (branch stratejisi)
 
-Her hafta ayrı bir feature branch'te geliştirilir, hafta sonunda
-`main`'e PR ile merge edilir:
+Her aşama ayrı bir feature branch'te geliştirilir, tamamlanınca
+`main`'e PR ile merge edilir. Branch adları içeriğe göre isimlendirilir
+(hafta numarası yerine ne yapıldığını anlatır):
 
 | Branch | İçerik |
 |---|---|
-| `week1-planning` | Consensus/CAP teorisi, mimari, multi-tenant şema tasarımı |
-| `week2-skeleton` | FastAPI + Docker + PostgreSQL iskeleti, sentetik veri üretici |
-| `week3-single-validator` | Tek validator worker + RAG (tek-LLM baseline) |
-| `week4-consensus` | Celery + Redis ile N validator paralel, quorum/timeout/fallback |
-| `week5-evaluation` | Consensus vs tek-LLM precision/recall/F1 karşılaştırması |
-| `week6-polish` | Cilalama, CI/CD, README, CV güncelleme |
+| `feat/consensus-architecture-planning` | Consensus/CAP teorisi, mimari, multi-tenant şema tasarımı |
+| `feat/fastapi-docker-postgres-skeleton` | FastAPI + Docker + PostgreSQL iskeleti, sentetik veri üretici |
+| `feat/single-validator-rag-baseline` | Tek validator worker + RAG (tek-LLM baseline) |
+| `feat/celery-quorum-consensus` | Celery + Redis ile N validator paralel, quorum/timeout/fallback |
+| `feat/consensus-evaluation-metrics` | Consensus vs tek-LLM precision/recall/F1 karşılaştırması |
+| `chore/polish-ci-cd-docs` | Cilalama, CI/CD, README, CV güncelleme |
 
 Her branch kendi PR'ında açıklanır (ne yapıldı, neden), böylece
-`main`'in geçmişi haftalık ilerlemenin okunabilir bir kaydı olur.
+`main`'in geçmişi ilerlemenin okunabilir bir kaydı olur.
 
 ## Kurulum (yerel)
 
