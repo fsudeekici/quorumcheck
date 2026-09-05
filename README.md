@@ -45,10 +45,34 @@ Her aşama ayrı bir feature branch'te geliştirilir, tamamlanınca
 Her branch kendi PR'ında açıklanır (ne yapıldı, neden), böylece
 `main`'in geçmişi ilerlemenin okunabilir bir kaydı olur.
 
-## Kurulum (yerel)
+## Kurulum (yerel, Docker olmadan)
 
 ```bash
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
-pytest tests/ -v
+PYTHONPATH=. pytest tests/ -v
 ```
+
+Not: `scripts/` altındaki script'leri çalıştırırken `PYTHONPATH=.`
+gerekli, aksi halde `app` paketi bulunamaz (`ModuleNotFoundError`).
+
+## Docker ile çalıştırma
+
+```bash
+cp .env.example .env
+docker compose up --build
+```
+
+API `http://localhost:8000/health` üzerinden ayakta olduğunu doğrular.
+Tablo oluşturma FastAPI `startup` event'inde otomatik yapılır (dev
+kolaylığı; prod'da Alembic migration'a geçilecek).
+
+## Sentetik veri üretme
+
+```bash
+PYTHONPATH=. python scripts/generate_synthetic_data.py --tenants 2 --orders 50 --violation-rate 0.2
+```
+
+`--violation-rate`, "iade tutarı sipariş tutarını aşamaz" kuralının ne
+sıklıkla kasıtlı ihlal edileceğini belirler — Hafta 3+'ta validator
+worker'ların bu ihlalleri yakalayıp yakalamadığını ölçmek için kullanılacak.

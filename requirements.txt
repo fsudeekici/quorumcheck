@@ -8,3 +8,5 @@ pydantic-settings
 celery
 redis
 python-dotenv
+pytest
+httpx
