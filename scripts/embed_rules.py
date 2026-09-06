@@ -9,6 +9,7 @@ Kullanim:
 """
 from app.core.embeddings import embed
 from app.db.base import SessionLocal
+from app.models import tenant, order, return_record, validator_vote, consensus_result  # noqa: F401
 from app.models.validation_rule import ValidationRule
 
 
