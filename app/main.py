@@ -5,6 +5,7 @@ from app.db.base import Base, engine, get_db
 from app.models import tenant, order, return_record, validation_rule, validator_vote, consensus_result  # noqa: F401
 from app.models.return_record import ReturnRecord
 from app.services.validator import validate_return
+from app.services.aggregator import run_consensus_pipeline
 
 app = FastAPI(title="QuorumCheck")
 
@@ -53,4 +54,23 @@ def validate(return_id: int, db: Session = Depends(get_db)):
         "decision": vote.decision,
         "confidence": vote.confidence,
         "reasoning": vote.reasoning,
+    }
+
+
+@app.post("/returns/{return_id}/validate-consensus")
+def validate_consensus(return_id: int, db: Session = Depends(get_db)):
+    """
+    Hafta 4: N validator'i Celery ile paralel calistirir, quorum
+    aggregator ile nihai karari verir. Hafta 3'teki tekil endpoint
+    (/validate) Hafta 5'te bu endpoint'e karsi baseline olarak
+    kullanilacak (precision/recall/F1 karsilastirmasi).
+    """
+    consensus = run_consensus_pipeline(db, return_id)
+    return {
+        "return_id": return_id,
+        "final_decision": consensus.final_decision,
+        "votes_collected": consensus.votes_collected,
+        "quorum_required": consensus.quorum_required,
+        "quorum_reached": consensus.quorum_reached,
+        "cap_mode_used": consensus.cap_mode_used,
     }

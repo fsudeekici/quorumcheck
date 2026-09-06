@@ -18,6 +18,11 @@ import random
 from decimal import Decimal
 
 from app.db.base import Base, SessionLocal, engine
+# NOT: SQLAlchemy'nin Base.metadata'si SADECE o ana kadar import edilmis
+# model siniflarini tanir. validator_vote/consensus_result burada
+# kullanilmasa bile import etmezsek create_all() o tablolari atlar -
+# bu yuzden butun modelleri burada aciktan import ediyoruz.
+from app.models import tenant, order, return_record, validation_rule, validator_vote, consensus_result  # noqa: F401
 from app.models.tenant import Tenant
 from app.models.order import Order
 from app.models.return_record import ReturnRecord

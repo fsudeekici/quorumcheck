@@ -66,6 +66,22 @@ API `http://localhost:8000/health` üzerinden ayakta olduğunu doğrular.
 Tablo oluşturma FastAPI `startup` event'inde otomatik yapılır (dev
 kolaylığı; prod'da Alembic migration'a geçilecek).
 
+## N validator paralel + quorum consensus (Hafta 4)
+
+```bash
+docker compose up --build   # api + worker + postgres + redis birlikte ayağa kalkar
+curl -X POST http://localhost:8000/returns/1/validate-consensus
+```
+
+`app/core/config.py` içindeki `CAP_MODE` (`CP` veya `AP`) quorum
+sağlanamadığında (timeout, LLM hatası, yetersiz oy) sistemin ne
+yapacağını belirler — `app/core/quorum.py`'deki `resolve_consensus()`
+fonksiyonu bu kararı somut kod olarak uygular.
+
+`tests/test_aggregator.py`, Celery'nin `task_always_eager` modunu
+kullanarak gerçek Redis/worker kurmadan (CI'da da çalışacak şekilde)
+quorum sağlanan/sağlanamayan ve CP/AP senaryolarını doğrular.
+
 ## Sentetik veri üretme
 
 ```bash

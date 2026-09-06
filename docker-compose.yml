@@ -41,5 +41,19 @@ services:
       redis:
         condition: service_healthy
 
+  worker:
+    build: .
+    command: celery -A app.core.celery_app.celery_app worker --loglevel=info
+    volumes:
+      - .:/code
+    environment:
+      DATABASE_URL: postgresql://quorumcheck:quorumcheck@postgres:5432/quorumcheck
+      REDIS_URL: redis://redis:6379/0
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
 volumes:
   postgres_data:
