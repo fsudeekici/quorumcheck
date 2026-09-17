@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Numeric, DateTime, ForeignKey, Index, func
+from sqlalchemy import Column, Integer, String, Numeric, Boolean, DateTime, ForeignKey, Index, func
 
 from app.db.base import Base
 
@@ -16,6 +16,11 @@ class ReturnRecord(Base):
     # Bu alan sentetik "kirli" veri ureticinin bilerek bozacagi alan:
     # is kurali orn. "iade tutari fatura tutarini asamaz"
     status = Column(String(20), default="pending")  # pending | validated | flagged
+
+    # Ground truth: veri uretilirken bilerek ihlal olarak mi uretildi.
+    # Sadece sentetik/test verisinde doldurulur; canlida hep NULL kalir -
+    # orada zaten "dogru cevap" onceden bilinmiyor, sistem onu buluyor.
+    is_violation = Column(Boolean, nullable=True)
 
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 

@@ -10,6 +10,9 @@ Su an kodlanmis kural:
 --violation-rate ile bu kuralin ne siklikta bilerek ihlal edilecegi
 ayarlanabilir (orn. 0.2 = kayitlarin %20'si kirli).
 
+is_violation alani ground truth olarak DB'ye kaydedilir - evaluation
+modulunun precision/recall/F1 hesaplayabilmesi icin gereklidir.
+
 Kullanim:
     python scripts/generate_synthetic_data.py --tenants 2 --orders 50 --violation-rate 0.2
 """
@@ -69,6 +72,7 @@ def generate(tenant_count: int, orders_per_tenant: int, violation_rate: float):
                     return_amount=return_amount,
                     reason=random.choice(REASONS),
                     status="pending",
+                    is_violation=is_violation,
                 ))
 
         db.commit()
