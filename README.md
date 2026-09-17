@@ -106,3 +106,21 @@ gerektirmiyor ve stateless (yeni metinler için yeniden fit gerekmiyor).
 Gerçek bir semantic embedding modeline (örn. Voyage AI) geçmek için
 sadece `app/core/embeddings.py` değişir, RAG/validator katmanları
 etkilenmez — bu ayrım kasıtlı bir mimari karar.
+
+## Evaluation: precision/recall/F1 (Week 5)
+
+```bash
+PYTHONPATH=. python scripts/run_evaluation.py
+```
+
+This script compares the system's decision with the real answer
+(`is_violation`, saved by the data generator) for every return record.
+It calculates precision, recall, F1 score, and accuracy.
+
+Right now, the script uses a simple mock prediction (it checks
+`return_amount > order_amount` directly in Python, without calling
+the LLM). This is not a real test of the model — it only proves that
+the full pipeline (database → prediction → metrics) works correctly.
+The next step is to replace the mock with real predictions from the
+single-validator baseline and the consensus system, so we can compare
+how well each one finds real rule violations.
